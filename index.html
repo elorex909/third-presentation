@@ -33,18 +33,20 @@ body {
   flex-direction: column;
   margin: 0;
   min-height: 100vh;
-  padding: 20px 0;
+  padding: 10px 0; /* Reduced padding for mobile */
   align-items: center;
   justify-content: center;
   font-family: 'Inter', sans-serif;
   color: var(--text-main);
   background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg-dark) 60%);
+  overflow: hidden; /* Prevent body scroll, handle inside slides */
 }
 
 /* Presentation Viewer */
 #presentation-viewer {
   width: 90vw;
   max-width: 1366px;
+  /* Default Desktop Ratio */
   height: calc(90vw * 9 / 16);
   max-height: 768px;
   position: relative;
@@ -54,7 +56,7 @@ body {
   background: rgba(30, 41, 59, 0.7);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: height 0.3s ease, width 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .slide-container {
@@ -64,7 +66,7 @@ body {
   flex-direction: column;
   height: 100%;
   justify-content: center;
-  overflow: hidden;
+  overflow: hidden; /* Default for desktop */
   padding: 60px;
   width: 100%;
   position: absolute;
@@ -75,11 +77,11 @@ body {
 .slide-container.active {
     display: flex;
     z-index: 2;
-    animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes slideUpFade {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -136,9 +138,10 @@ body {
 .two-column {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 50px;
+  gap: 40px;
   align-items: center;
   height: 80%;
+  width: 100%;
 }
 
 .tiled > div {
@@ -147,11 +150,12 @@ body {
   border: 1px solid rgba(255,255,255,0.05);
   padding: 35px;
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  overflow-y: auto; 
+  overflow-y: auto; /* Allow content scroll inside tile */
 }
 
 /* TEAM IMAGE STYLING */
@@ -186,18 +190,19 @@ body {
   font-size: 0.95rem;
   position: relative;
   border-radius: 12px;
+  min-height: 150px;
 }
 .code-block::before {
     content: 'C++'; position: absolute; top: 10px; right: 15px;
     color: var(--text-muted); font-size: 0.8rem; opacity: 0.5;
 }
-.code-block pre { margin: 0; padding: 20px; white-space: pre-wrap; }
+.code-block pre { margin: 0; padding: 20px; white-space: pre-wrap; word-wrap: break-word; }
 .keyword { color: #c678dd; } .function { color: #61afef; }
 .string { color: #98c379; } .number { color: #d19a66; }
 .comment { color: #5c6370; font-style: italic; }
 .operator { color: #56b6c2; }
 
-/* IO Box for Questions */
+/* IO Box */
 .io-box {
     background: rgba(0, 0, 0, 0.3);
     border: 1px dashed var(--text-muted);
@@ -214,7 +219,7 @@ body {
     font-weight: bold;
 }
 
-/* TAGS FOR PROBLEMS */
+/* TAGS */
 .tag {
     display: inline-block; padding: 6px 14px; border-radius: 20px;
     font-size: 0.85rem; font-weight: bold; margin-bottom: 20px;
@@ -226,7 +231,7 @@ body {
 
 /* 4. NAVIGATION */
 #nav-controls {
-    display: flex; align-items: center; justify-content: center; margin-top: 20px; gap: 20px;
+    display: flex; align-items: center; justify-content: center; margin-top: 10px; gap: 15px;
 }
 #nav-controls button {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -237,9 +242,8 @@ body {
 }
 #nav-controls button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5); }
 #nav-controls button:disabled { background: var(--bg-card); color: var(--text-muted); cursor: not-allowed; box-shadow: none; transform: none;}
-#slide-counter { color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+#slide-counter { color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
 
-/* Link Button */
 .contest-btn {
     background: linear-gradient(90deg, var(--success), #10b981);
     color: white; text-decoration: none; padding: 20px 40px;
@@ -248,21 +252,68 @@ body {
     box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
     transition: all 0.3s ease;
 }
-.contest-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(34, 197, 94, 0.6); }
 
-/* MOBILE */
+/* MOBILE VIEW TOGGLES */
 #view-toggle-controls button {
     background: var(--bg-card); border: 1px solid rgba(255,255,255,0.1);
     color: var(--text-muted); padding: 8px 16px; border-radius: 8px; cursor: pointer;
 }
 #view-toggle-controls button.active { background: var(--primary); color: white; }
 
-.mobile-view #presentation-viewer { width: 95vw; height: 85vh; max-height: none; }
-.mobile-view .slide-container { padding: 20px; overflow-y: auto; display: block; }
-.mobile-view .two-column { grid-template-columns: 1fr; display: flex; flex-direction: column; gap: 20px; }
-.mobile-view h1 { font-size: 2.5rem; }
-.mobile-view .slide-title { font-size: 1.8rem; margin-bottom: 20px; }
-.mobile-view .image-wrapper { width: 180px; height: 180px; }
+
+/* ============================================
+   CRITICAL MOBILE FIXES START HERE 
+============================================
+*/
+.mobile-view #presentation-viewer {
+    width: 95vw;
+    height: 85vh; /* Force taller height on mobile */
+    max-height: none; /* Remove desktop constraint */
+    aspect-ratio: auto; /* Remove aspect ratio */
+}
+
+.mobile-view .slide-container {
+    padding: 20px; /* Less padding */
+    overflow-y: auto; /* Enable vertical scroll for the whole slide */
+    display: block; /* Allow natural flow */
+    justify-content: flex-start; /* Start from top */
+}
+
+.mobile-view .content-area {
+    height: auto; /* Let content grow */
+    min-height: 100%;
+    display: block; /* Remove flex centering to prevent squash */
+}
+
+.mobile-view .two-column {
+    display: flex;
+    flex-direction: column; /* Stack items */
+    gap: 20px;
+    height: auto; /* Let it grow */
+    margin-bottom: 40px; /* Space at bottom for scrolling */
+}
+
+.mobile-view .tiled > div {
+    height: auto; /* Tiles grow with content */
+    min-height: 200px;
+    padding: 25px;
+}
+
+/* Adjust fonts for mobile */
+.mobile-view h1 { font-size: 2.5rem; line-height: 1.2; }
+.mobile-view .slide-title { font-size: 1.8rem; margin-bottom: 15px; margin-top: 0; }
+.mobile-view h3 { font-size: 1.3rem; }
+.mobile-view p, .mobile-view li { font-size: 1rem; }
+
+.mobile-view .image-wrapper { width: 180px; height: 180px; margin-bottom: 20px; }
+
+.mobile-view .code-block {
+    font-size: 0.8rem; /* Smaller code font */
+}
+.mobile-view .contest-btn {
+    font-size: 1.1rem;
+    padding: 15px 30px;
+}
 
     </style>
 </head>
@@ -277,7 +328,7 @@ body {
 <div id="presentation-viewer">
 
     <div class="slide-container active" id="slide1">
-      <div class="content-area" style="text-align: center;">
+      <div class="content-area" style="text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%;">
         <div>
             <span style="background: rgba(56, 189, 248, 0.1); color: var(--accent); padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Level 1</span>
             <h1 style="margin-top: 20px;">Loops & <span class="gradient-text">Control Flow</span></h1>
@@ -1012,7 +1063,7 @@ cout &lt;&lt; sum;</pre>
     </div>
 
     <div class="slide-container" id="slide35">
-        <div class="content-area" style="text-align: center;">
+        <div class="content-area" style="text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%;">
             <div>
                 <i class="fa-solid fa-trophy" style="font-size: 5rem; color: var(--warning); margin-bottom: 20px;"></i>
                 <h2 style="font-size: 3.5rem;">Ready to Compete?</h2>
@@ -1044,6 +1095,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const desktopBtn = document.getElementById('desktop-view-btn');
     const mobileBtn = document.getElementById('mobile-view-btn');
 
+    // Set default to desktop
     bodyEl.classList.add('desktop-view');
     
     desktopBtn.addEventListener('click', () => {
